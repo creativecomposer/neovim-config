@@ -29,7 +29,7 @@ vim.opt.updatetime = 50
 
 vim.opt.colorcolumn = "100"
 
--- indent when moving to the next line while writing code 
+-- indent when moving to the next line while writing code
 vim.opt.smartindent = true
 
 -- Give more space for displaying messages
@@ -37,3 +37,5 @@ vim.opt.cmdheight = 2
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
+
+vim.opt.statusline = "%<%f\\ %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V%)\\ %P"
