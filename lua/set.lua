@@ -39,4 +39,4 @@ vim.opt.cmdheight = 2
 vim.o.completeopt = 'menuone,noselect'
 
 vim.opt.statusline =
-"%<%F | %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V,%L%) | %y"
+"%<%F, [%n] | %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V,%L%) | %y"
