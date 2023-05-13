@@ -38,4 +38,5 @@ vim.opt.cmdheight = 2
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect'
 
-vim.opt.statusline = "%<%f\\ %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V%)\\ %P"
+vim.opt.statusline =
+"%<%F | %h%m%r%{FugitiveStatusline()}%=%-14.(%l,%c%V,%L%) | %y"
