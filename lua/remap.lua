@@ -3,8 +3,7 @@ vim.g.mapleader = " "
 -- shortcut to open netrw
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
--- shortcut to run prettier on current buffer
-vim.keymap.set('n', 'gp', ':Prettier<CR>', { silent = true })
+-- shortcut to format current buffer
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 
 -- highlight lines and move them around with J and K
@@ -17,9 +16,6 @@ vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 -- keep the cursor in the middle of the screen when searching
 vim.keymap.set("n", "n", "nzzzv")
 vim.keymap.set("n", "N", "Nzzzv")
-
--- shortcut to clear previous search highlighting
-vim.keymap.set('n', '<Leader>/', ':nohlsearch<CR>', { silent = true })
 
 -- shortcut to copy highlighted text to clipboard
 vim.keymap.set({ "n", "v" }, "<leader>c", [["+y]])
