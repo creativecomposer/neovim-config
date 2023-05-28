@@ -9,10 +9,12 @@ lsp.ensure_installed({
   'tsserver',
   'eslint',
   'lua_ls',
+  'cssls',
 })
 
 lsp.on_attach(function(_, bufnr)
   lsp.default_keymaps({ buffer = bufnr })
+  vim.keymap.set('n', '<F5>', '<cmd>lua vim.lsp.buf.code_action()<cr>', { buffer = true })
 end)
 
 -- (Optional) Configure lua language server for neovim
@@ -26,6 +28,7 @@ local filetypes = {
   "javascript",
   "javascriptreact",
   "json",
+  "jsonc",
   "less",
   "markdown",
   "scss",
