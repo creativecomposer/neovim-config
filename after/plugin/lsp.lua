@@ -56,7 +56,8 @@ local cmp_action = require('lsp-zero').cmp_action()
 cmp.setup({
   sources = {
     { name = 'nvim_lsp' },
-    { name = 'nvim_lua' }
+    { name = 'nvim_lua' },
+    { name = 'path' }
   },
   mapping = {
     -- `Enter` key to confirm completion

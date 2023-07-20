@@ -23,6 +23,9 @@ return require('packer').startup(function(use)
 
   use('mbbill/undotree')
 
+  -- autocomplete sources
+  use('hrsh7th/cmp-path')
+
   use {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'v2.x',
@@ -50,5 +53,5 @@ return require('packer').startup(function(use)
     requires = { { 'nvim-lua/plenary.nvim' } }
   })
 
-  use('/home/learner/plugins/stackmap.nvim')
+  -- use('/home/learner/plugins/stackmap.nvim')
 end)
