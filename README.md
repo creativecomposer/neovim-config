@@ -13,7 +13,13 @@ set up LSP.
 ## How to set up
 
 1. Clone this repo to `~/.config/nvim/`.
+
 2. Run `ansible-playbook packer.yml`.
+
 3. Make sure that the npm packages `typescript`, `typescript-language-server`, and `vscode-langservers-extracted` are installed.
-   I use `nvm` to manage node and the global npm packages. So, running `nvm install --lts` installs all of these packages for me.
+
+   - I use `nvm` to manage node and the global npm packages. So, running `nvm install --lts` installs all of these packages for me.
+
 4. Install NeoVim.
+
+5. Launch NeoVim and run `PackerSync`.
