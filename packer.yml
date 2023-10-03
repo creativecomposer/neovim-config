@@ -1,0 +1,23 @@
+- hosts: localhost
+  name: Packer
+  vars:
+    packer_path: "{{ packerpath | default('~/.local/share/nvim/site/pack/packer/start/packer.nvim') }}"
+
+  tasks:
+    - name: Check if packer repo already exists
+      ansible.builtin.stat:
+        path: "{{ packer_path }}"
+        get_checksum: false
+      register: packer_dir
+      tags:
+        - nvim
+        - packer
+
+    - name: Clone packer repo
+      ansible.builtin.git: # noqa: latest
+        repo: "https://github.com/wbthomason/packer.nvim"
+        dest: "{{ packer_path }}"
+      when: not packer_dir.stat.exists
+      tags:
+        - nvim
+        - packer
