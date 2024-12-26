@@ -1,57 +1,58 @@
-return require('packer').startup(function(use)
-  -- Packer can manage itself
-  use 'wbthomason/packer.nvim'
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 
-  use({
+-- Auto-install lazy.nvim if not present
+if not vim.uv.fs_stat(lazypath) then
+  print('Installing lazy.nvim....')
+  vim.fn.system({
+    'git',
+    'clone',
+    '--filter=blob:none',
+    'https://github.com/folke/lazy.nvim.git',
+    '--branch=stable', -- latest stable release
+    lazypath,
+  })
+  print('Done.')
+end
+
+vim.opt.rtp:prepend(lazypath)
+
+-- Install the desired plugins using lazy.nvim
+require('lazy').setup({
+  {
     'folke/tokyonight.nvim',
     config = function()
       vim.opt.termguicolors = true
       vim.cmd.colorscheme('tokyonight-moon')
-    end
-  })
+    end,
+  },
 
-  use {
-    'nvim-telescope/telescope.nvim', tag = '0.1.5', -- or, branch = '0.1.x',
-    requires = { { 'nvim-lua/plenary.nvim' } }
-  }
+  {
+    'nvim-telescope/telescope.nvim', tag = '0.1.8',
+    dependencies = { 'nvim-lua/plenary.nvim' }
+  },
 
-  use({ 'nvim-treesitter/nvim-treesitter', { run = ':TSUpdate' } })
-  use('nvim-treesitter/playground')
+  {
+    "nvim-treesitter/nvim-treesitter", build = ":TSUpdate",
+    config = function ()
+      local configs = require("nvim-treesitter.configs")
 
-  use('tpope/vim-fugitive')
-  use('tpope/vim-eunuch')
+      configs.setup({
+          ensure_installed = { "bash", "css", "dockerfile", "html", "javascript", "lua", "markdown", "python", "scss", "typescript", "vim", "yaml", },
+          sync_install = false,
+          highlight = { enable = true },
+          indent = { enable = true },
+        })
+    end,
+  },
 
-  use('mbbill/undotree')
+  {'tpope/vim-fugitive'},
+  {'tpope/vim-eunuch'},
 
-  -- autocomplete sources
-  use('hrsh7th/cmp-path')
+  {'mbbill/undotree'},
 
-  use {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'v2.x',
-    requires = {
-      -- LSP Support
-      { 'neovim/nvim-lspconfig' }, -- Required
-      {
-        -- Optional
-        'williamboman/mason.nvim',
-        run = function()
-          pcall(vim.cmd, 'MasonUpdate')
-        end,
-      },
-      { 'williamboman/mason-lspconfig.nvim' }, -- Optional
+  -- Language Server Protocol related plugins
+  {'neovim/nvim-lspconfig'},
+  {'hrsh7th/cmp-nvim-lsp'},
+  {'hrsh7th/nvim-cmp'},
+})
 
-      -- Autocompletion
-      { 'hrsh7th/nvim-cmp' },     -- Required
-      { 'hrsh7th/cmp-nvim-lsp' }, -- Required
-      { 'L3MON4D3/LuaSnip' },     -- Required
-    }
-  }
-
-  use({
-    'jose-elias-alvarez/null-ls.nvim',
-    requires = { { 'nvim-lua/plenary.nvim' } }
-  })
-
-  -- use('/home/learner/plugins/stackmap.nvim')
-end)
