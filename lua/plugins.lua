@@ -51,6 +51,8 @@ require('lazy').setup({
   {'mbbill/undotree'},
 
   -- Language Server Protocol related plugins
+  {'williamboman/mason.nvim'}, -- For installing the language servers
+  {'williamboman/mason-lspconfig.nvim'}, -- For automatic configuring the installed language servers
   {'neovim/nvim-lspconfig'},
   {'hrsh7th/cmp-nvim-lsp'},
   {'hrsh7th/nvim-cmp'},

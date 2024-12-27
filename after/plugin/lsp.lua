@@ -1,81 +1,66 @@
-local lsp = require('lsp-zero').preset({})
+-- Add cmp_nvim_lsp capabilities settings to lspconfig
+-- This should be executed before you configure any language server
+local lspconfig_defaults = require('lspconfig').util.default_config
+lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+  'force',
+  lspconfig_defaults.capabilities,
+  require('cmp_nvim_lsp').default_capabilities()
+)
 
--- Ensure the following language servers are installed
--- You have to install the language servers separately.
--- For lua, run "brew install lua-language-server" and
--- "npm install -g typescript typescript-language-server vscode-langservers-extracted"
--- for typescript and eslint. Or add to ~/.nvm/default-packages
-lsp.ensure_installed({
-  'tsserver',
-  'eslint',
-  'lua_ls',
-  'cssls',
+-- This is where you enable features that only work if there is a language server active in the file
+vim.api.nvim_create_autocmd('LspAttach', {
+  desc = 'LSP actions',
+  callback = function(event)
+    local opts = {buffer = event.buf}
+
+    vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
+    vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
+    vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
+    vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+    vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+    vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+    vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+    vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+    vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+    vim.keymap.set('n', '<F5>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+  end,
 })
 
-lsp.on_attach(function(_, bufnr)
-  lsp.default_keymaps({ buffer = bufnr })
-  vim.keymap.set('n', '<F5>', '<cmd>lua vim.lsp.buf.code_action()<cr>', { buffer = true })
-end)
-
--- (Optional) Configure lua language server for neovim
-local lspconfig = require('lspconfig')
-lspconfig.lua_ls.setup(lsp.nvim_lua_ls())
-
-local filetypes = {
-  "css",
-  "graphql",
-  "html",
-  "javascript",
-  "javascriptreact",
-  "json",
-  "jsonc",
-  "less",
-  "markdown",
-  "scss",
-  "typescript",
-  "typescriptreact",
-  "yaml",
-}
-
-lsp.format_on_save({
-  format_opts = {
-    timeout_ms = 10000,
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  -- The language servers in ensure_installed must be in https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers
+  ensure_installed = {'cssls', 'html', 'eslint', 'pylsp', 'ts_ls', },
+  handlers = {
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
   },
-  servers = {
-    ['lua_ls'] = { 'lua' },
-    ['null-ls'] = filetypes,
-  }
 })
 
-lsp.setup()
 
--- Make sure you setup `cmp` after lsp-zero
+-- Autocompletion setup
 local cmp = require('cmp')
-local cmp_action = require('lsp-zero').cmp_action()
 
 cmp.setup({
+  -- Each source is a plugin that needs to be installed separately (using lazy.nvim)
   sources = {
     { name = 'nvim_lsp' },
-    { name = 'nvim_lua' },
-    { name = 'path' }
   },
-  mapping = {
+  mapping = cmp.mapping.preset.insert({
     -- `Enter` key to confirm completion
     ['<CR>'] = cmp.mapping.confirm({ select = true }),
 
     -- Ctrl+Space to trigger completion menu
     ['<C-Space>'] = cmp.mapping.complete(),
 
-    -- Navigate between snippet placeholder
-    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-  }
+    -- Scroll up and down in the completion documentation
+    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(4),
+  }),
+  snippet = {
+    expand = function(args)
+      vim.snippet.expand(args.body)
+    end,
+  },
 })
 
-local null_ls = require('null-ls')
-
-null_ls.setup({
-  sources = {
-    null_ls.builtins.formatting.prettier,
-  }
-})
