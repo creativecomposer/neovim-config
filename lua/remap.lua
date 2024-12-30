@@ -3,9 +3,6 @@ vim.g.mapleader = " "
 -- shortcut to open netrw
 vim.keymap.set("n", "<leader>pv", vim.cmd.Ex)
 
--- shortcut to format current buffer
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
-
 -- highlight lines and move them around with J and K
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
