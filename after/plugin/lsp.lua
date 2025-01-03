@@ -29,7 +29,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 require('mason').setup({})
 require('mason-lspconfig').setup({
   -- The language servers in ensure_installed must be in https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers
-  ensure_installed = {'cssls', 'html', 'eslint', 'pylsp', 'ts_ls', },
+  ensure_installed = {'cssls', 'html', 'eslint', 'pylsp', 'vtsls', },
   handlers = {
     function(server_name)
       require('lspconfig')[server_name].setup({})
